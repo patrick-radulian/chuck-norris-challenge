@@ -2,7 +2,7 @@ import { Button, Container, Grid, InputAdornment, TextField, Typography } from '
 import { blue } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import EmailTable, { TableEntry } from 'components/data-table/email-table';
-import { AppGlobalContext, GlobalContext, useGlobalContext } from 'context/global-context';
+import { AppGlobalContext, GlobalContext } from 'context/global-context';
 import React from 'react';
 import './App.css';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
@@ -10,7 +10,7 @@ import isEmail from "validator/lib/isEmail";
 
 
 
-const tableData: Array<TableEntry> = [
+const initialTableData: Array<TableEntry> = [
     { email: "patrick.alexander.radulian@gmail.com" },
     { email: "brigitta.lorenz@icloud.com" },
     { email: "alexander.boris@gmail.com" },
@@ -20,30 +20,63 @@ const tableData: Array<TableEntry> = [
 
 
 function App() {
-    const [emails, setEmails] = React.useState<Array<string>>(["patrick.radulian@gmail.com"]);
+    const [emails, setEmails] = React.useState<Array<TableEntry>>(initialTableData);
     const [emailInputValue, setEmailInputValue] = React.useState<string>("");
+    const [isEmailValid, setIsEmailValid] = React.useState<boolean>(true);
 
     const appContext: GlobalContext = {emails, setEmails, emailInputValue, setEmailInputValue}
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setEmailInputValue(event.target.value);
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setEmailInputValue(event.currentTarget.value);
+    }
+
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === "Enter") handleAddEmail();
+    }
+
+    const handleAddEmail = (event?: React.FormEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement>) => {
+        const isEmailValid = isEmail(emailInputValue);
+
+        setIsEmailValid(isEmailValid);
+
+        if (isEmailValid) setEmails(prevEmails => {
+            return [...prevEmails, { email: emailInputValue }];
+        });
+    }
 
     return (
         <AppGlobalContext.Provider value={appContext}>
             <Container maxWidth="md">
                 <Box m={4}>
-                    <Typography variant='h5' fontFamily="Lora" fontWeight={300} align='center'>Welcome to the <em>dadochunda</em> <Typography display="inline" color={blue[400]}>noun</Typography></Typography>
+                    <Typography variant='h5' fontFamily="Lora" fontWeight={300} align='center'>
+                        Welcome to the <em>dadochunda</em>
+                        <Typography display="inline" color={blue[400]}>noun</Typography>
+                    </Typography>
+
                     <Typography align='center' color={blue[200]}>\ 'da • də • chun, • də \</Typography>
-                    <Typography align='center' variant='subtitle2' fontFamily="Lora" fontWeight={300}><em>(<u>da</u>ily <u>do</u>se of <u>Chu</u>ck <u>N</u>orris <u>d</u>elivery <u>a</u>pparatus)</em></Typography>
+
+                    <Typography align='center' variant='subtitle2' fontFamily="Lora" fontWeight={300}>
+                        <em>(<u>da</u>ily <u>do</u>se of <u>Chu</u>ck <u>N</u>orris <u>d</u>elivery <u>a</u>pparatus)</em>
+                    </Typography>
                 </Box>
 
-                <EmailTable tableData={tableData}/>
+                <EmailTable tableData={emails}/>
 
                 <Grid container alignItems="center" spacing={2}>
                     <Grid item flexGrow={1}>
-                        <TextField size='small' label="Add E-mail address" value={emailInputValue} onChange={handleChange} fullWidth InputProps={{startAdornment: (<InputAdornment position='start'><EmailRoundedIcon/></InputAdornment>)}}/>
+                        <TextField
+                            size='small'
+                            label="Add E-mail address"
+                            value={emailInputValue}
+                            onChange={handleChange}
+                            onKeyPress={handleKeyPress}
+                            helperText={isEmailValid ? " " : "Please enter a valid e-mail address"}
+                            fullWidth
+                            InputProps={{startAdornment: (<InputAdornment position='start'><EmailRoundedIcon/></InputAdornment>)}}
+                        />
                     </Grid>
                     <Grid item flexShrink={0}>
-                        <Button variant="contained">Add Email</Button>
+                        <Button variant="contained" onClick={handleAddEmail}>Add Email</Button>
                     </Grid>
                 </Grid>
             </Container>
