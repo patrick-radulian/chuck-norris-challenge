@@ -6,6 +6,7 @@ import { AppGlobalContext, GlobalContext, useGlobalContext } from 'context/globa
 import React from 'react';
 import './App.css';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
+import isEmail from "validator/lib/isEmail";
 
 
 
