@@ -26,7 +26,8 @@ type DestructuredData = {
 export default function EmailTable(props: TableProps) {
     const [page, setPage] = React.useState(0);
 
-    const rowsPerPage: number = 10;
+    const rowsPerPage: number = 5;
+    const emptyRows = Math.max(0, (1 + page) * rowsPerPage - props.tableData.length);
 
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, newPage: number) => setPage(newPage);
 
@@ -80,9 +81,13 @@ export default function EmailTable(props: TableProps) {
 
                             {destructuredData.length === 0 && (
                                 <TableRow tabIndex={-1}>
-                                    <TableCell>No recepients yet</TableCell>
-                                    <TableCell></TableCell>
-                                    <TableCell></TableCell>
+                                    <TableCell colSpan={3}>No recepients yet</TableCell>
+                                </TableRow>
+                            )}
+
+                            {emptyRows > 0 && (
+                                <TableRow sx={{height: 53 * emptyRows}}>
+                                    <TableCell colSpan={3} />
                                 </TableRow>
                             )}
                         </TableBody>
