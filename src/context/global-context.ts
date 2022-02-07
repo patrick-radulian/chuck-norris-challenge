@@ -1,9 +1,8 @@
-import { TableEntry } from "components/data-table/email-table";
 import React from "react";
 
 export type GlobalContext = {
-    emails: Array<TableEntry>,
-    setEmails: (emails: Array<TableEntry>) => void,
+    emails: Array<string>,
+    setEmails: (emails: Array<string>) => void,
     emailInputValue: string,
     setEmailInputValue: (value: string) => void
 }

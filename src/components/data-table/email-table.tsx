@@ -9,12 +9,10 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-export type TableEntry = {
-    email: string
-}
+
 
 export type TableProps = {
-    tableData: Array<TableEntry>
+    tableData: Array<string>
 }
 
 type DestructuredData = {
@@ -24,6 +22,7 @@ type DestructuredData = {
 }
 
 
+
 export default function EmailTable(props: TableProps) {
     const [page, setPage] = React.useState(0);
 
@@ -31,14 +30,14 @@ export default function EmailTable(props: TableProps) {
 
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, newPage: number) => setPage(newPage);
 
-    const destructuredData: Array<DestructuredData> = props.tableData.map(entry => {
+    const destructuredData: Array<DestructuredData> = props.tableData.map(email => {
         const splitRegExp = new RegExp("(?=[<@])");
-        const splitEmailArray = entry.email.split(splitRegExp);
+        const splitEmailArray = email.split(splitRegExp);
         const splitNameArray = splitEmailArray[0].split(".");
         const capitalizedNameArray = splitNameArray.map(namePart => `${namePart[0].toUpperCase()}${namePart.slice(1)}`);
 
         return {
-            email: entry.email,
+            email,
             name: capitalizedNameArray.toString().replaceAll(",", " "),
             domain: splitEmailArray[1],
         }
@@ -78,6 +77,14 @@ export default function EmailTable(props: TableProps) {
                                     <TableCell>{entry.domain}</TableCell>
                                 </TableRow>
                             ))}
+
+                            {destructuredData.length === 0 && (
+                                <TableRow tabIndex={-1}>
+                                    <TableCell>No recepients yet</TableCell>
+                                    <TableCell></TableCell>
+                                    <TableCell></TableCell>
+                                </TableRow>
+                            )}
                         </TableBody>
                     </Table>
                 </TableContainer>

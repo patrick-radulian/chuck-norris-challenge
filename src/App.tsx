@@ -1,7 +1,7 @@
-import { Button, Container, Grid, InputAdornment, TextField, Typography } from '@mui/material';
+import { Button, Container, Divider, Grid, InputAdornment, TextField, Typography } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { Box } from '@mui/system';
-import EmailTable, { TableEntry } from 'components/data-table/email-table';
+import EmailTable from 'components/data-table/email-table';
 import { AppGlobalContext, GlobalContext } from 'context/global-context';
 import React from 'react';
 import './App.css';
@@ -10,24 +10,27 @@ import isEmail from "validator/lib/isEmail";
 
 
 
-const initialTableData: Array<TableEntry> = [
-    { email: "patrick.alexander.radulian@gmail.com" },
-    { email: "brigitta.lorenz@icloud.com" },
-    { email: "alexander.boris@gmail.com" },
-    { email: "lenamaria.urban@icloud.com" }
+const initialTableData: Array<string> = [
+    // "patrick.alexander.radulian@gmail.com",
+    // "brigitta.lorenz@icloud.com",
+    // "alexander.boris@gmail.com",
+    // "lenamaria.urban@icloud.com"
 ];
 
 
 
 function App() {
-    const [emails, setEmails] = React.useState<Array<TableEntry>>(initialTableData);
+    const [emails, setEmails] = React.useState<Array<string>>(initialTableData);
     const [emailInputValue, setEmailInputValue] = React.useState<string>("");
-    const [isEmailValid, setIsEmailValid] = React.useState<boolean>(true);
+    const [inputHelperText, setInputHelperText] = React.useState<string>(" ");
+    const [showConfirmation, setShowConfirmation] = React.useState<boolean>(false);
 
     const appContext: GlobalContext = {emails, setEmails, emailInputValue, setEmailInputValue}
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEmailInputValue(event.currentTarget.value);
+        setEmailInputValue(event.target.value);
+
+        if (event.target.value === "") setInputHelperText(" ");
     }
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -35,21 +38,40 @@ function App() {
     }
 
     const handleAddEmail = (event?: React.FormEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement>) => {
-        const isEmailValid = isEmail(emailInputValue);
+        const isValid = isEmail(emailInputValue);
 
-        setIsEmailValid(isEmailValid);
-
-        if (isEmailValid) setEmails(prevEmails => {
-            return [...prevEmails, { email: emailInputValue }];
-        });
+        if (isValid) {
+            if (emails.find(email => email === emailInputValue)) {
+                setInputHelperText("This e-mail address has already been added.")
+            } else {
+                setEmails(prevEmails => [...prevEmails, emailInputValue]);
+                setInputHelperText(" ");
+                setEmailInputValue("");
+                setShowConfirmation(true);
+            }
+        } else {
+            setInputHelperText("Please enter a valid e-mail address.");
+        }
     }
+
+    React.useEffect(() => {
+        if (!showConfirmation) return;
+
+        const timeoutID = setTimeout(() => {
+            setShowConfirmation(false);
+        }, 2000);
+
+        return () => {
+            clearTimeout(timeoutID);
+        }
+    }, [showConfirmation]);
 
     return (
         <AppGlobalContext.Provider value={appContext}>
             <Container maxWidth="md">
                 <Box m={4}>
                     <Typography variant='h5' fontFamily="Lora" fontWeight={300} align='center'>
-                        Welcome to the <em>dadochunda</em>
+                        Welcome to the <em>dadochunda </em>
                         <Typography display="inline" color={blue[400]}>noun</Typography>
                     </Typography>
 
@@ -60,9 +82,14 @@ function App() {
                     </Typography>
                 </Box>
 
-                <EmailTable tableData={emails}/>
+                <Divider/>
 
-                <Grid container alignItems="center" spacing={2}>
+                <Box textAlign="center" m={4}>
+                    <Typography variant="h6">Who would you like to surprise today?</Typography>
+                    <Typography variant="subtitle2">Enter the recepient's e-mail and add it to the list.</Typography>
+                </Box>
+
+                <Grid container alignItems="flex-start" spacing={2}>
                     <Grid item flexGrow={1}>
                         <TextField
                             size='small'
@@ -70,7 +97,7 @@ function App() {
                             value={emailInputValue}
                             onChange={handleChange}
                             onKeyPress={handleKeyPress}
-                            helperText={isEmailValid ? " " : "Please enter a valid e-mail address"}
+                            helperText={inputHelperText}
                             fullWidth
                             InputProps={{startAdornment: (<InputAdornment position='start'><EmailRoundedIcon/></InputAdornment>)}}
                         />
@@ -79,6 +106,12 @@ function App() {
                         <Button variant="contained" onClick={handleAddEmail}>Add Email</Button>
                     </Grid>
                 </Grid>
+
+                <EmailTable tableData={emails}/>
+
+                <Box textAlign="center">
+                    <Typography variant="h4" color="#70BE44" className={`confirmation ${showConfirmation ? "animate" : ""}`}>E-mail address successfully added.</Typography>
+                </Box>
             </Container>
         </AppGlobalContext.Provider>
     );
