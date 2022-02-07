@@ -1,11 +1,19 @@
 import { Container, TextField, Typography } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { Box } from '@mui/system';
+import EmailTable, { TableEntry } from 'components/data-table/email-table';
 import { AppGlobalContext, GlobalContext, useGlobalContext } from 'context/global-context';
 import React from 'react';
 import './App.css';
 
 
+
+const tableData: Array<TableEntry> = [
+    { email: "patrick.alexander.radulian@gmail.com" },
+    { email: "brigitta.lorenz@icloud.com" },
+    { email: "alexander.boris@gmail.com" },
+    { email: "lenamaria.urban@icloud.com" }
+];
 
 
 
@@ -13,12 +21,7 @@ function App() {
     const [emails, setEmails] = React.useState<Array<string>>(["patrick.radulian@gmail.com"]);
     const [emailInputValue, setEmailInputValue] = React.useState<string>("");
 
-    const appContext: GlobalContext = {
-        emails,
-        setEmails,
-        emailInputValue,
-        setEmailInputValue
-    }
+    const appContext: GlobalContext = {emails, setEmails, emailInputValue, setEmailInputValue}
 
     return (
         <AppGlobalContext.Provider value={appContext}>
@@ -30,6 +33,8 @@ function App() {
                 </Box>
 
                 <Typography>{emails.toString()}</Typography>
+
+                <EmailTable tableData={tableData}/>
 
                 <TextField label="Add E-mail address" value={emailInputValue} fullWidth/>
             </Container>
