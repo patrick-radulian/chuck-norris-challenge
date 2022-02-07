@@ -44,6 +44,19 @@ export default function EmailTable(props: TableProps) {
         }
     });
 
+    const sortData = (a: DestructuredData, b: DestructuredData) => {
+        const domainA = a.domain.toLowerCase();
+        const domainB = b.domain.toLowerCase();
+
+        if (domainA < domainB) {
+            return -1;
+        }
+        if (domainA > domainB) {
+            return 1;
+        }
+        return a.name.localeCompare(b.name);
+    }
+
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
@@ -58,7 +71,7 @@ export default function EmailTable(props: TableProps) {
                         </TableHead>
 
                         <TableBody>
-                            {destructuredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((entry, index) => (
+                            {destructuredData.sort(sortData).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((entry, index) => (
                                 <TableRow tabIndex={-1} key={index}>
                                     <TableCell>{entry.email}</TableCell>
                                     <TableCell>{entry.name}</TableCell>
