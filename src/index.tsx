@@ -5,11 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider } from '@emotion/react';
 import { AppTheme } from 'theming/theme';
+import { CssBaseline } from '@mui/material';
 
 ReactDOM.render(
     <React.StrictMode>
         <ThemeProvider theme={AppTheme}>
-            <App />
+            <CssBaseline>
+                <App />
+            </CssBaseline>
         </ThemeProvider>
     </React.StrictMode>,
     document.getElementById('root')
