@@ -33,15 +33,20 @@ function JokeApparatus() {
 
         const response = await fetch("http://localhost:9000/send-mails", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify(payload)
         });
 
-        const status = response.status;
-        const data: SendJokeResponse = await response.json();
-        console.log(`Status: ${status}, Message: ${data.message}, Invalid Emails: ${data.invalidEmails.toString()}`);
+        if (response) {
+            const status: number = response.status;
+            const data: SendJokeResponse = await response.json();
+
+            if (response.ok) {
+                console.log(`Status: ${status}, Message: ${data.message}, Invalid Emails: ${data.invalidEmails.toString()}`);
+            } else {
+                console.error(data.message);
+            }
+        }
     }, [joke, emails]);
 
     React.useEffect(() => {

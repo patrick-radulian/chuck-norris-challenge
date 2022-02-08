@@ -18,9 +18,9 @@ async function sendEmails(recepients, joke) {
     });
 
     let info = await transporter.sendMail({
-        from: '"Chuck Norris 🧔" <chuck.norris@chuck.norris>',
+        from: '"Chuck Norris 🧔 Delivery Apparatus" <delivery@chuck.norris>',
         to: recepients,
-        subject: "Hello ✔",
+        subject: "Your daily dose of Chuck Norris",
         text: joke
     });
 
@@ -31,14 +31,20 @@ async function sendEmails(recepients, joke) {
 
 
 router.post("/", function(req, res) {
-    if (!Array.isArray(req.body.emails)) {
+    const validEmails = [];
+    const invalidEmails = [];
+    let message = "";
+
+    if (!req.body.emails || req.body.emails.length === 0) {
+        res.status(400).send({
+            message: "You have not supplied any e-mails addresses."
+        });
+    } else if (!Array.isArray(req.body.emails)) {
         res.status(500).send({
-            error: "You've provided an invalid array of e-mails. Please check the array and try again."
+            message: "You've provided an invalid array of e-mail addresses. Please check the array and try again."
         });
     } else {
-        const validEmails = [];
-        const invalidEmails = [];
-        let message = "";
+
 
         for (let email of req.body.emails) {
             if (isEmail(email)) {
