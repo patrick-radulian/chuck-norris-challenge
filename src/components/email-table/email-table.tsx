@@ -61,7 +61,7 @@ function EmailTable(props: TableProps) {
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <TableContainer>
-                    <Table sx={{ minWidth: 450 }} size="small" aria-labelledby="tableTitle">
+                    <Table size="small" aria-labelledby="tableTitle">
                         <TableHead>
                             <TableRow>
                                 <TableCell>E-mail</TableCell>
@@ -73,9 +73,9 @@ function EmailTable(props: TableProps) {
                         <TableBody>
                             {destructuredData.sort(sortData).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((entry, index) => (
                                 <TableRow tabIndex={-1} key={index}>
-                                    <TableCell>{entry.email}</TableCell>
-                                    <TableCell>{entry.name}</TableCell>
-                                    <TableCell>{entry.domain}</TableCell>
+                                    <TableCell sx={{width: "50%"}}>{entry.email}</TableCell>
+                                    <TableCell sx={{width: "25%"}}>{entry.name}</TableCell>
+                                    <TableCell sx={{width: "25%"}}>{entry.domain}</TableCell>
                                 </TableRow>
                             ))}
 
