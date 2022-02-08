@@ -51,7 +51,7 @@ function App() {
 
         const timeoutID = setTimeout(() => {
             setShowConfirmation(false);
-        }, 2000);
+        }, 2500);
 
         return () => {
             clearTimeout(timeoutID);
@@ -91,7 +91,7 @@ function App() {
 
                 <EmailTable tableData={emails}/>
 
-                <Box textAlign="center">
+                <Box m={2} textAlign="center">
                     <Typography variant="h4" color="#70BE44" className={`confirmation ${showConfirmation ? "animate" : ""}`}>E-mail address successfully added.</Typography>
                 </Box>
 

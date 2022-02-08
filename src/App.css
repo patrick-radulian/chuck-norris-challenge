@@ -3,15 +3,19 @@
 }
 
 .confirmation.animate {
-    animation: confirmation-animation ease-in 2s;
+    animation: confirmation-animation ease-in 2.5s;
 }
 
 @keyframes confirmation-animation {
-    from {
+    0% {
         opacity: 1;
     }
 
-    to {
+    66% {
+        opacity: 1;
+    }
+
+    100% {
         opacity: 0;
     }
 }
