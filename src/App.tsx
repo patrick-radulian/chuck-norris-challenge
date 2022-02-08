@@ -14,10 +14,11 @@ import JokeApparatus from 'components/joke-apparatus/joke-apparatus';
 function App() {
     const [emails, setEmails] = React.useState<Array<string>>([]);
     const [emailInputValue, setEmailInputValue] = React.useState<string>("");
+    const [joke, setJoke] = React.useState<string>("");
     const [inputHelperText, setInputHelperText] = React.useState<string>(" ");
     const [showConfirmation, setShowConfirmation] = React.useState<boolean>(false);
 
-    const appContext: GlobalContext = {emails, setEmails, emailInputValue, setEmailInputValue}
+    const appContext: GlobalContext = {emails, setEmails, emailInputValue, setEmailInputValue, joke, setJoke};
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmailInputValue(event.target.value);
