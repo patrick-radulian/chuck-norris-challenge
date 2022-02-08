@@ -61,7 +61,7 @@ function App() {
 
     return (
         <AppGlobalContext.Provider value={appContext}>
-            <Container maxWidth="md">
+            <Container maxWidth="md" sx={{my: 4}}>
                 <Header/>
 
                 <Divider/>
@@ -72,7 +72,8 @@ function App() {
                 </Box>
 
                 <Grid container alignItems="flex-start" spacing={2}>
-                    <Grid item flexGrow={1}>
+                    <Grid item flexShrink={0} flexBasis={150}>1. Add E-mail Addresses</Grid>
+                    <Grid item flex={1}>
                         <TextField
                             size='small'
                             label="Add E-mail address"
@@ -95,9 +96,10 @@ function App() {
                     <Typography variant="h4" color="#70BE44" className={`confirmation ${showConfirmation ? "animate" : ""}`}>E-mail address successfully added.</Typography>
                 </Box>
 
-                <Box>
-                    <JokeApparatus/>
-                </Box>
+                <Grid container gap={2}>
+                    <Grid item flexShrink={0} flexBasis={150}>2. Regenerate or Send Joke</Grid>
+                    <Grid item flex={1}><JokeApparatus/></Grid>
+                </Grid>
             </Container>
         </AppGlobalContext.Provider>
     );
