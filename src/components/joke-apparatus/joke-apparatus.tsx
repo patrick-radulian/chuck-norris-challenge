@@ -1,10 +1,11 @@
 import { LoadingButton } from "@mui/lab";
-import { Box, Button } from "@mui/material";
-import { grey } from "@mui/material/colors";
+import { Box, Button, Typography } from "@mui/material";
+import { grey, red } from "@mui/material/colors";
 import CachedIcon from '@mui/icons-material/Cached';
 import SendIcon from '@mui/icons-material/Send';
 import { useGlobalContext } from "context/global-context";
 import React from "react";
+import styles from "./joke-apparatus.module.css";
 
 type RandomJoke = {
     type: string,
@@ -23,15 +24,33 @@ type SendJokeResponse = {
 function JokeApparatus() {
     const { emails, joke, setJoke } = useGlobalContext();
     const [sending, setSending] = React.useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = React.useState<string>("");
+    const [showError, setShowError] = React.useState<boolean>(false);
+    const currentJoke = React.useRef<string>(joke);
 
     const fetchNewJoke = React.useCallback(async () => {
-        const jk = await fetch("http://api.icndb.com/jokes/random?escape=javascript");
-        const data: RandomJoke = await jk.json();
+        return new Promise<RandomJoke>((resolve, reject) => {
+            fetch("http://api.icndb.com/jokes/random?escape=javascript")
+                .then(response => {
+                    if (!response.ok) reject(`${response.status}`);
 
-        console.log(data);
-
-        setJoke(data.value.joke);
+                    resolve(response.json());
+                })
+                .catch(error => {
+                    console.error(error);
+                    setJoke("");
+                    setErrorMessage("Failed to fetch new joke. Please check the console for details.");
+                    setShowError(true);
+                });
+        })
     }, [setJoke]);
+
+    const refreshJoke = React.useCallback(async () => {
+        const response = await fetchNewJoke();
+
+        setJoke(response.value.joke);
+        currentJoke.current = response.value.joke;
+    }, [setJoke, fetchNewJoke]);
 
     const sendMails = React.useCallback(async () => {
         setSending(true);
@@ -52,22 +71,42 @@ function JokeApparatus() {
                 console.log(`Status: ${status}, Message: ${data.message}, Invalid Emails: ${data.invalidEmails.toString()}`);
             } else {
                 console.error(data.message);
+                setJoke("");
+                setErrorMessage(data.message);
+                setShowError(true);
             }
         }
 
         setSending(false);
-    }, [joke, emails]);
+    }, [joke, emails, setJoke]);
 
     React.useEffect(() => {
-        fetchNewJoke();
-    }, [fetchNewJoke]);
+        if (!showError) return;
+
+        const timeoutID = setTimeout(() => {
+            setShowError(false);
+            setErrorMessage("");
+            setJoke(currentJoke.current);
+        }, 5000);
+
+        return () => {
+            clearTimeout(timeoutID);
+        }
+    }, [showError, setJoke]);
+
+    React.useEffect(() => {
+        refreshJoke();
+    }, [refreshJoke]);
 
     return (
         <Box p={1} sx={{border: 1, borderColor: grey[800], borderRadius: 2}}>
+            <Box sx={{color: red[600]}} className={`${styles.jokeFetchError} ${showError ? styles.animate : ""}`}>
+                <Typography>{errorMessage}</Typography>
+            </Box>
             <Box p={1}>{joke}</Box>
 
             <Box display="flex" justifyContent="flex-end">
-                <Button sx={{mx: 1}} onClick={fetchNewJoke} startIcon={<CachedIcon/>}>Fetch New Joke</Button>
+                <Button sx={{mx: 1}} onClick={refreshJoke} startIcon={<CachedIcon/>}>Fetch New Joke</Button>
                 <LoadingButton sx={{mx: 1}} onClick={sendMails} loading={sending} loadingPosition="start" startIcon={<SendIcon/>}>
                     {sending ? (
                         <>Sending</>

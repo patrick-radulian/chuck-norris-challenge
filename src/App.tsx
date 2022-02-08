@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import styles from './App.module.css';
 import { Box, Button, Container, Divider, Grid, InputAdornment, TextField, Typography } from '@mui/material';
 import EmailTable from 'components/email-table/email-table';
 import { AppGlobalContext, GlobalContext } from 'context/global-context';
@@ -92,7 +92,7 @@ function App() {
                 <EmailTable tableData={emails}/>
 
                 <Box m={2} textAlign="center">
-                    <Typography variant="h4" color="#70BE44" className={`confirmation ${showConfirmation ? "animate" : ""}`}>E-mail address successfully added.</Typography>
+                    <Typography variant="h4" color="#70BE44" className={`${styles.confirmation} ${showConfirmation ? styles.animate : ""}`}>E-mail address successfully added.</Typography>
                 </Box>
 
                 <Grid container gap={2}>

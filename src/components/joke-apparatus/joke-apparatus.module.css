@@ -1,0 +1,21 @@
+.jokeFetchError {
+    opacity: 0;
+}
+
+.jokeFetchError.animate {
+    animation: joke-fetch-error ease-out 5s;
+}
+
+@keyframes joke-fetch-error {
+    0% {
+        opacity: 1;
+    }
+
+    66% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}

@@ -37,7 +37,7 @@ router.post("/", function(req, res) {
 
     if (!req.body.emails || req.body.emails.length === 0) {
         res.status(400).send({
-            message: "You have not supplied any e-mails addresses."
+            message: "You have not supplied any e-mail addresses."
         });
     } else if (!Array.isArray(req.body.emails)) {
         res.status(500).send({
@@ -48,10 +48,10 @@ router.post("/", function(req, res) {
 
         for (let email of req.body.emails) {
             if (isEmail(email)) {
-                console.log(`${email} is a valid email.`)
+                console.log(`${email} is a valid e-mail.`)
                 validEmails.push(email);
             } else {
-                console.log(`${email} is an invalid email.`)
+                console.log(`${email} is an invalid e-mail.`)
                 invalidEmails.push(email);
             }
         }
