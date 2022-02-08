@@ -1,4 +1,5 @@
 import { Box, Button } from "@mui/material";
+import { grey } from "@mui/material/colors";
 import { useGlobalContext } from "context/global-context";
 import React from "react";
 
@@ -54,10 +55,13 @@ function JokeApparatus() {
     }, [fetchNewJoke]);
 
     return (
-        <Box>
-            <div>{joke}</div>
-            <Button onClick={fetchNewJoke}>Fetch New Joke</Button>
-            <Button onClick={sendMails}>Send Jokes</Button>
+        <Box p={1} sx={{border: 1, borderColor: grey[800], borderRadius: 2}}>
+            <Box p={1}>{joke}</Box>
+
+            <Box display="flex" justifyContent="flex-end">
+                <Button sx={{mx: 1}} onClick={fetchNewJoke}>Fetch New Joke</Button>
+                <Button sx={{mx: 1}} onClick={sendMails}>Send Jokes</Button>
+            </Box>
         </Box>
     )
 }
