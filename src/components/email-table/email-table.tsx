@@ -86,7 +86,7 @@ function EmailTable(props: TableProps) {
                             )}
 
                             {emptyRows > 0 && (
-                                <TableRow sx={{height: 33 * emptyRows}}>
+                                <TableRow sx={{height: 33 * (destructuredData.length === 0 ? (emptyRows - 1) : emptyRows)}}>
                                     <TableCell colSpan={3} />
                                 </TableRow>
                             )}
