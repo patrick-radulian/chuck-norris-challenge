@@ -1,5 +1,8 @@
+import { LoadingButton } from "@mui/lab";
 import { Box, Button } from "@mui/material";
 import { grey } from "@mui/material/colors";
+import CachedIcon from '@mui/icons-material/Cached';
+import SendIcon from '@mui/icons-material/Send';
 import { useGlobalContext } from "context/global-context";
 import React from "react";
 
@@ -19,9 +22,10 @@ type SendJokeResponse = {
 
 function JokeApparatus() {
     const { emails, joke, setJoke } = useGlobalContext();
+    const [sending, setSending] = React.useState<boolean>(false);
 
     const fetchNewJoke = React.useCallback(async () => {
-        const jk = await fetch("http://api.icndb.com/jokes/random");
+        const jk = await fetch("http://api.icndb.com/jokes/random?escape=javascript");
         const data: RandomJoke = await jk.json();
 
         console.log(data);
@@ -30,6 +34,8 @@ function JokeApparatus() {
     }, [setJoke]);
 
     const sendMails = React.useCallback(async () => {
+        setSending(true);
+
         const payload = { emails, joke};
 
         const response = await fetch("http://localhost:9000/send-mails", {
@@ -48,6 +54,8 @@ function JokeApparatus() {
                 console.error(data.message);
             }
         }
+
+        setSending(false);
     }, [joke, emails]);
 
     React.useEffect(() => {
@@ -59,8 +67,14 @@ function JokeApparatus() {
             <Box p={1}>{joke}</Box>
 
             <Box display="flex" justifyContent="flex-end">
-                <Button sx={{mx: 1}} onClick={fetchNewJoke}>Fetch New Joke</Button>
-                <Button sx={{mx: 1}} onClick={sendMails}>Send Jokes</Button>
+                <Button sx={{mx: 1}} onClick={fetchNewJoke} startIcon={<CachedIcon/>}>Fetch New Joke</Button>
+                <LoadingButton sx={{mx: 1}} onClick={sendMails} loading={sending} loadingPosition="start" startIcon={<SendIcon/>}>
+                    {sending ? (
+                        <>Sending</>
+                    ) : (
+                        <>Send Jokes</>
+                    )}
+                </LoadingButton>
             </Box>
         </Box>
     )
