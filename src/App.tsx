@@ -1,8 +1,7 @@
 import React from 'react';
 import './App.css';
-import { Button, Container, Divider, Grid, InputAdornment, TextField, Typography } from '@mui/material';
-import { Box } from '@mui/system';
-import EmailTable from 'components/data-table/email-table';
+import { Box, Button, Container, Divider, Grid, InputAdornment, TextField, Typography } from '@mui/material';
+import EmailTable from 'components/email-table/email-table';
 import { AppGlobalContext, GlobalContext } from 'context/global-context';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import isEmail from "validator/lib/isEmail";
