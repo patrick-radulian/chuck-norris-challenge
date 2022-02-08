@@ -22,9 +22,16 @@ function JokeApparatus() {
         setCurrentJoke(data.value.joke);
     }, []);
 
+    const testAPI = React.useCallback(async () => {
+        const response = await fetch("http://localhost:9000/testAPI");
+        const data = await response.text();
+        console.log(data);
+    }, []);
+
     React.useEffect(() => {
         fetchNewJoke();
-    }, [fetchNewJoke]);
+        testAPI();
+    }, [fetchNewJoke, testAPI]);
 
     return (
         <Box>
