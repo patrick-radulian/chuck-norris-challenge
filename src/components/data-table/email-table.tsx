@@ -61,7 +61,7 @@ function EmailTable(props: TableProps) {
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <TableContainer>
-                    <Table sx={{ minWidth: 450 }} aria-labelledby="tableTitle">
+                    <Table sx={{ minWidth: 450 }} size="small" aria-labelledby="tableTitle">
                         <TableHead>
                             <TableRow>
                                 <TableCell>E-mail</TableCell>
@@ -86,7 +86,7 @@ function EmailTable(props: TableProps) {
                             )}
 
                             {emptyRows > 0 && (
-                                <TableRow sx={{height: 53 * emptyRows}}>
+                                <TableRow sx={{height: 33 * emptyRows}}>
                                     <TableCell colSpan={3} />
                                 </TableRow>
                             )}
