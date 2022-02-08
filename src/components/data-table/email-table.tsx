@@ -23,7 +23,7 @@ type DestructuredData = {
 
 
 
-export default function EmailTable(props: TableProps) {
+function EmailTable(props: TableProps) {
     const [page, setPage] = React.useState(0);
 
     const rowsPerPage: number = 5;
@@ -99,3 +99,5 @@ export default function EmailTable(props: TableProps) {
         </Box>
     );
 }
+
+export default EmailTable;

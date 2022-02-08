@@ -1,26 +1,18 @@
+import React from 'react';
+import './App.css';
 import { Button, Container, Divider, Grid, InputAdornment, TextField, Typography } from '@mui/material';
-import { blue } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import EmailTable from 'components/data-table/email-table';
 import { AppGlobalContext, GlobalContext } from 'context/global-context';
-import React from 'react';
-import './App.css';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import isEmail from "validator/lib/isEmail";
-
-
-
-const initialTableData: Array<string> = [
-    // "patrick.alexander.radulian@gmail.com",
-    // "brigitta.lorenz@icloud.com",
-    // "alexander.boris@gmail.com",
-    // "lenamaria.urban@icloud.com"
-];
+import Header from 'components/header/header';
+import JokeApparatus from 'components/joke-apparatus/joke-apparatus';
 
 
 
 function App() {
-    const [emails, setEmails] = React.useState<Array<string>>(initialTableData);
+    const [emails, setEmails] = React.useState<Array<string>>([]);
     const [emailInputValue, setEmailInputValue] = React.useState<string>("");
     const [inputHelperText, setInputHelperText] = React.useState<string>(" ");
     const [showConfirmation, setShowConfirmation] = React.useState<boolean>(false);
@@ -69,18 +61,7 @@ function App() {
     return (
         <AppGlobalContext.Provider value={appContext}>
             <Container maxWidth="md">
-                <Box m={4}>
-                    <Typography variant='h5' fontFamily="Lora" fontWeight={300} align='center'>
-                        Welcome to the <em>dadochunda </em>
-                        <Typography display="inline" color={blue[400]}>noun</Typography>
-                    </Typography>
-
-                    <Typography align='center' color={blue[200]}>\ 'da • də • chun, • də \</Typography>
-
-                    <Typography align='center' variant='subtitle2' fontFamily="Lora" fontWeight={300}>
-                        <em>(<u>da</u>ily <u>do</u>se of <u>Chu</u>ck <u>N</u>orris <u>d</u>elivery <u>a</u>pparatus)</em>
-                    </Typography>
-                </Box>
+                <Header/>
 
                 <Divider/>
 
@@ -111,6 +92,10 @@ function App() {
 
                 <Box textAlign="center">
                     <Typography variant="h4" color="#70BE44" className={`confirmation ${showConfirmation ? "animate" : ""}`}>E-mail address successfully added.</Typography>
+                </Box>
+
+                <Box>
+                    <JokeApparatus/>
                 </Box>
             </Container>
         </AppGlobalContext.Provider>
