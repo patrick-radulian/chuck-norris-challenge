@@ -7,6 +7,7 @@ import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import isEmail from "validator/lib/isEmail";
 import Header from 'components/header/header';
 import JokeApparatus from 'components/joke-apparatus/joke-apparatus';
+import { green } from '@mui/material/colors';
 
 
 
@@ -44,6 +45,10 @@ function App() {
         } else {
             setInputHelperText("Please enter a valid e-mail address.");
         }
+    }
+
+    const resetEmails = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setEmails([]);
     }
 
     React.useEffect(() => {
@@ -91,8 +96,12 @@ function App() {
 
                 <EmailTable tableData={emails}/>
 
+                <Box display="flex" justifyContent="flex-end">
+                    <Button onClick={resetEmails}>Reset E-mails</Button>
+                </Box>
+
                 <Box m={2} textAlign="center">
-                    <Typography variant="h4" color="#70BE44" className={`${styles.confirmation} ${showConfirmation ? styles.animate : ""}`}>E-mail address successfully added.</Typography>
+                    <Typography variant="h4" color={green[400]} className={`${styles.confirmation} ${showConfirmation ? styles.animate : ""}`}>E-mail address successfully added.</Typography>
                 </Box>
 
                 <Grid container gap={2}>
