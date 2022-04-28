@@ -34,7 +34,7 @@ function JokeApparatus() {
 
     const fetchNewJoke = React.useCallback(async () => {
         return new Promise<RandomJoke>((resolve, reject) => {
-            fetch("http://api.icndb.com/jokes/random?escape=javascript")
+            fetch("https://api.icndb.com/jokes/random?escape=javascript")
                 .then(response => {
                     if (!response.ok) reject(`${response.status}`);
 
